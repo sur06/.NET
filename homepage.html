@@ -6,7 +6,7 @@
 <body>
 
     <div>
-        <h2>All ID's</h2>
+        <h2>All Names's</h2>
         <ul id="homes" />
     </div>
     <div>
@@ -24,28 +24,71 @@
       // Send an AJAX request
       $.getJSON(uri)
           .done(function (data) {
+
             // On success, 'data' contains a list of products.
             $.each(data, function (key, item) {
               // Add a list item for the product.
-              $('<li>', { text: formatItem(item) }).appendTo($('#homes'));
+                // $('<li>', { text: getName(item) }).appendTo($('#homes'));
+                getId(item);
             });
           });
+
+
+
     });
 
-    function formatItem(item) {
-      return item.Id + ': ' + item.Name;
+    function getId(data) {
+        //alert(data);
+        var ids = [];
+        for (var i = 0; i < data.length; i++) {
+            ids.push(data[i].id);
+
+        }
+        //return names;
+        var mainList = document.getElementById("homes");
+
+        for (var i = 0; i < ids.length; i++) {
+            var item = ids[i];
+            var elem = document.createElement("li");
+            elem.value = item[0];
+            elem.innerHTML = item;
+
+            mainList.appendChild(elem);
+        }
+    }
+
+    /*function formatItem(item) {
+        return JSON.stringify(item);
+    }*/
+    function getName(data, id) {
+
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].id == id) {
+                if (data[i].name == "") {
+                    $('#Result').text("Empty string");
+                }
+                else {
+                    $('#Result').text(data[i].name);
+                }
+            }
+        }
+
+
     }
 
     function find() {
-      var id = $('#prodId').val();
-      $.getJSON(uri + '/' + id)
+        var id = $('#prodId').val();
+
+        $.getJSON(uri)
           .done(function (data) {
-            $('#Result').text(formatItem(data));
-          })
+              $.each(data, function (key, item) {
+                  getName(item,id);
+              })
+           })
           .fail(function (jqXHR, textStatus, err) {
             $('#Result').text('Error: ' + err);
           });
-  
+
     }
     </script>
 </body>
